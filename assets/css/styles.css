@@ -1,0 +1,45 @@
+
+*, ::before, ::after{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+section.quiz-display{
+    border: 5px solid black;
+    display: flex;
+    flex-direction: column;
+    margin: 100px;
+    padding: 20px;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 20px;
+    gap: 50px;
+}
+
+.conteneurChoix{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.choix{
+    border-radius: 15px;
+    padding: 5px;
+    flex: 1 1 30%;
+
+    border: 2px solid black;
+    background-color: lightblue;
+    color: black;
+    transition-duration: .5s;
+    transition-property: border-color, background-color, color;
+}
+.choix:hover{
+    border-color: red;
+    background-color: blue;
+    color: white;
+    cursor: pointer;
+}
+
