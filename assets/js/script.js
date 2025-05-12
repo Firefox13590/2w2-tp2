@@ -9,7 +9,8 @@ numeroQuestion = 0,
 nbBonnesReponses = 0,
 nbQsTotales = questionnaire.length,
 noTentative,
-temps = 0;
+temps = 0,
+setIID;
 
 console.log(questionnaire, btnNavQuiz, quizDisplay, leaderboardDisplay);
 
@@ -80,21 +81,15 @@ function validationReponse(e){
  * Affiche l'ecran de fin
  */
 function endScreen(){
-    quizDisplay.style.opacity = 0;
-    // quizDisplay.style.display = "none";
-    leaderboardDisplay.style.opacity = 1;
-    // leaderboardDisplay.style.display = "block";
-
-    // let textResults = document.createElement("p");
-    // textResults.innerHTML = `
-    //                         Nombre de questions réussies: ${nbBonnesReponses}<br>
-    //                         Nombre de questions totales: ${nbQsTotales}<br>
-    //                         Taux de réussite: ${Math.round((nbBonnesReponses / nbQsTotales) * 100)}%`;
-    // quizDisplay.append(textResults);
+    clearInterval(setIID);
+    quizDisplay.style.display = "none";
+    leaderboardDisplay.style.display = "table";
 
     currentTentativeData = new LeaderboardData(noTentative, nbBonnesReponses, temps);
     leaderboard.push(currentTentativeData);
+    leaderboard.sort(triLeaderboardReussiteDescendant);
     console.log(leaderboard);
+
     viderConteneur(leaderboardDisplay);
     let head = leaderboardDisplay.createTHead();
     let body = leaderboardDisplay.createTBody();
@@ -117,11 +112,13 @@ function endScreen(){
  */
 function restartQuiz(){
     numeroQuestion = nbBonnesReponses = temps = 0;
-    quizDisplay.style.opacity = 1;
-    // quizDisplay.style.display = "flex";
+    noTentative++;
+    quizDisplay.style.display = "flex";
+    leaderboardDisplay.style.display = "none";
     btnNavQuiz.removeEventListener("click", restartQuiz);
     btnNavQuiz.textContent = "Prochaine question";
     btnNavQuiz.addEventListener("click", processNextAction);
+    setIID = setInterval(chronometre, 1000);
     displayQuestion();
 }
 
@@ -152,11 +149,14 @@ function massCreateTableData(row, thTagInstead, lstData){
     }
 }
 
+function chronometre(){
+    temps++;
+}
+
 
 /* EXECUTION */
 displayQuestion();
-leaderboardDisplay.style.opacity = 0;
-// leaderboardDisplay.style.display = "none";
+leaderboardDisplay.style.display = "none";
 noTentative = localStorage.getItem("nbTotalTentatives");
 leaderboard = localStorage.getItem("leaderboard");
 
@@ -172,4 +172,5 @@ if(leaderboard == null){
 }
 
 localStorage.setItem("nbTotalTentatives", noTentative);
+setIID = setInterval(chronometre, 1000);
 

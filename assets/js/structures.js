@@ -37,11 +37,25 @@ let leaderboard = [];
  * Constructeur pour donnees leaderboard
  * @param {Number} tentative 
  * @param {Number} nbBonnesReponses 
- * @param {String} temps 
+ * @param {Number} temps 
  */
 function LeaderboardData(tentative, nbBonnesReponses, temps){
     this.tentative = tentative;
     this.nbBonnesReponses = nbBonnesReponses;
-    this.tauxReussite = Math.round((this.nbBonnesReponses / nbQsTotales) * 100) + " %";
+    this.tauxReussite = Math.round((this.nbBonnesReponses / nbQsTotales) * 100);
     this.temps = temps;
+}
+
+/**
+ * Compare 2 objets pour les trier selon le taux de reussite
+ * @param {LeaderboardData} a Premier objet de comparaison
+ * @param {LeaderboardData} b Deuxieme objet de comparaison
+ * @returns Valeur de retour du tri
+ * @example 
+ * > 0 -> [b, a]
+ * < 0 -> [a, b]
+ * === 0 -> meme ordre
+ */
+function triLeaderboardReussiteDescendant(a, b){
+    return b.tauxReussite - a.tauxReussite
 }
