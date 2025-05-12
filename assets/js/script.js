@@ -11,10 +11,13 @@ console.log(questionnaire, btnNavQuiz, quizDisplay);
 
 
 /* ECOUTEURS D'EVENEMENTS */
-btnNavQuiz.addEventListener("click", showNextQuestion);
+btnNavQuiz.addEventListener("click", processNextAction);
 
 
 /* FONCTIONS */
+/**
+ * Affiche le titre de la question ainsi que les choix
+ */
 function displayQuestion(){
     while(quizDisplay.children.length > 0){
         quizDisplay.children[0].remove();
@@ -39,12 +42,15 @@ function displayQuestion(){
     quizDisplay.append(lstChoix);
 }
 
-function showNextQuestion(){
+/**
+ * incremente le nb de questions et decide soit d'afficher la prochaine qs soit la fin du quiz
+ */
+function processNextAction(){
     if(numeroQuestion + 1 < questionnaire.length){
         numeroQuestion++;
         displayQuestion();
     }else{
-        btnNavQuiz.removeEventListener("click", showNextQuestion);
+        btnNavQuiz.removeEventListener("click", processNextAction);
         btnNavQuiz.textContent = "Recommencer le quiz";
         btnNavQuiz.addEventListener("click", restartQuiz);
         endScreen();
@@ -52,7 +58,7 @@ function showNextQuestion(){
 }
 
 /**
- * Check si la reponse cliquee est l abonne ou non
+ * Check si la reponse cliquee est la bonne ou non
  * @param {MouseEvent} e evenement click de l'interface MouseEvent
  */
 function validationReponse(e){
@@ -65,9 +71,12 @@ function validationReponse(e){
         console.log("mauvaise reponse");
     }
 
-    showNextQuestion();
+    processNextAction();
 }
 
+/**
+ * Affiche l'ecran de fin
+ */
 function endScreen(){
     while(quizDisplay.children.length > 0){
         quizDisplay.children[0].remove();
@@ -81,11 +90,14 @@ function endScreen(){
     quizDisplay.append(textResults);
 }
 
+/**
+ * Recommence le quiz
+ */
 function restartQuiz(){
     numeroQuestion = nbBonnesReponses = 0;
     btnNavQuiz.removeEventListener("click", restartQuiz);
     btnNavQuiz.textContent = "Prochaine question";
-    btnNavQuiz.addEventListener("click", showNextQuestion);
+    btnNavQuiz.addEventListener("click", processNextAction);
     displayQuestion();
 }
 
