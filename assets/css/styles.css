@@ -17,6 +17,11 @@ section.quiz-display{
     gap: 50px;
 }
 
+table{
+    width: 90%;
+    margin: auto;
+}
+
 .conteneurChoix{
     display: flex;
     flex-wrap: wrap;

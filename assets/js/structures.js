@@ -1,4 +1,6 @@
-
+/**
+ * Structure pour questionnaire
+ */
 const questionnaire = [
     {
         titre: "Pourquoi suis-je fan de la franchise Mario?",
@@ -24,4 +26,22 @@ const questionnaire = [
         ],
         reponse: 5,
     },
-]
+];
+
+/**
+ * Structure pour leaderboard
+ */
+let leaderboard = [];
+
+/**
+ * Constructeur pour donnees leaderboard
+ * @param {Number} tentative 
+ * @param {Number} nbBonnesReponses 
+ * @param {String} temps 
+ */
+function LeaderboardData(tentative, nbBonnesReponses, temps){
+    this.tentative = tentative;
+    this.nbBonnesReponses = nbBonnesReponses;
+    this.tauxReussite = Math.round((this.nbBonnesReponses / nbQsTotales) * 100) + " %";
+    this.temps = temps;
+}

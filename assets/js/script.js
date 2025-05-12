@@ -1,13 +1,17 @@
 /* VARIABLES */
 const
 btnNavQuiz = document.querySelector("button"),
-quizDisplay = document.querySelector(".quiz-display");
+quizDisplay = document.querySelector(".quiz-display"),
+leaderboardDisplay = document.querySelector(".leaderboard");
 
 let
 numeroQuestion = 0,
-nbBonnesReponses = 0;
+nbBonnesReponses = 0,
+nbQsTotales = questionnaire.length,
+noTentative,
+temps = 0;
 
-console.log(questionnaire, btnNavQuiz, quizDisplay);
+console.log(questionnaire, btnNavQuiz, quizDisplay, leaderboardDisplay);
 
 
 /* ECOUTEURS D'EVENEMENTS */
@@ -19,14 +23,12 @@ btnNavQuiz.addEventListener("click", processNextAction);
  * Affiche le titre de la question ainsi que les choix
  */
 function displayQuestion(){
-    while(quizDisplay.children.length > 0){
-        quizDisplay.children[0].remove();
-    }
+    viderConteneur(quizDisplay);
 
     let
     titreQs = document.createElement("h2"),
     lstChoix = document.createElement("div");
-    titreQs.textContent = questionnaire[numeroQuestion].titre;
+    titreQs.textContent = numeroQuestion + 1 + " - " + questionnaire[numeroQuestion].titre;
     lstChoix.classList.add("conteneurChoix");
 
     for(let [index, value] of questionnaire[numeroQuestion].choix.entries()){
@@ -46,7 +48,7 @@ function displayQuestion(){
  * incremente le nb de questions et decide soit d'afficher la prochaine qs soit la fin du quiz
  */
 function processNextAction(){
-    if(numeroQuestion + 1 < questionnaire.length){
+    if(numeroQuestion + 1 < nbQsTotales){
         numeroQuestion++;
         displayQuestion();
     }else{
@@ -78,29 +80,96 @@ function validationReponse(e){
  * Affiche l'ecran de fin
  */
 function endScreen(){
-    while(quizDisplay.children.length > 0){
-        quizDisplay.children[0].remove();
+    quizDisplay.style.opacity = 0;
+    // quizDisplay.style.display = "none";
+    leaderboardDisplay.style.opacity = 1;
+    // leaderboardDisplay.style.display = "block";
+
+    // let textResults = document.createElement("p");
+    // textResults.innerHTML = `
+    //                         Nombre de questions réussies: ${nbBonnesReponses}<br>
+    //                         Nombre de questions totales: ${nbQsTotales}<br>
+    //                         Taux de réussite: ${Math.round((nbBonnesReponses / nbQsTotales) * 100)}%`;
+    // quizDisplay.append(textResults);
+
+    currentTentativeData = new LeaderboardData(noTentative, nbBonnesReponses, temps);
+    leaderboard.push(currentTentativeData);
+    console.log(leaderboard);
+    viderConteneur(leaderboardDisplay);
+    let head = leaderboardDisplay.createTHead();
+    let body = leaderboardDisplay.createTBody();
+    let foot = leaderboardDisplay.createTFoot();
+    let row = head.insertRow();
+    console.log(head, body, foot, row);
+    massCreateTableData(row, true, ["# Tentative", "Nombre bonnes réponses", "% Taux réussite", "Temps"]);
+
+    for(let stats of leaderboard){
+        row = body.insertRow();
+        massCreateTableData(row, false, Object.values(stats));
     }
 
-    let textResults = document.createElement("p");
-    textResults.innerHTML = `
-                            Nombre de questions réussies: ${nbBonnesReponses}<br>
-                            Nombre de questions totales: ${questionnaire.length}<br>
-                            Taux de réussite: ${Math.round((nbBonnesReponses / questionnaire.length) * 100)}%`;
-    quizDisplay.append(textResults);
+    row = foot.insertRow();
+    massCreateTableData(row, false, Object.values(currentTentativeData));
 }
 
 /**
  * Recommence le quiz
  */
 function restartQuiz(){
-    numeroQuestion = nbBonnesReponses = 0;
+    numeroQuestion = nbBonnesReponses = temps = 0;
+    quizDisplay.style.opacity = 1;
+    // quizDisplay.style.display = "flex";
     btnNavQuiz.removeEventListener("click", restartQuiz);
     btnNavQuiz.textContent = "Prochaine question";
     btnNavQuiz.addEventListener("click", processNextAction);
     displayQuestion();
 }
 
+/**
+ * Fonction recursive pour vider tout le contenu(enfants) d'un element HTML
+ * @param {Element} conteneur Conteneur HTML de type Element
+ */
+function viderConteneur(conteneur){
+    if(conteneur.children.length > 0){
+        conteneur.children[0].remove();
+        viderConteneur(conteneur);
+    }
+}
+
+/**
+ * Insere plusieurs donnees en masse dans une table html
+ * @param {Element} row La rangee ou ajouter les donnees
+ * @param {Boolean} thTagInstead S'il faut utiliser le tag "th" au lieu de "td"
+ * @param {Array} lstData Tableau contenant toutes les valeurs de donnees a ajouter
+ */
+function massCreateTableData(row, thTagInstead, lstData){
+    let tag = thTagInstead ? "TH" : "TD";
+
+    for(let data of lstData){
+        let cell = document.createElement(tag);
+        cell.textContent = data;
+        row.append(cell);
+    }
+}
+
 
 /* EXECUTION */
 displayQuestion();
+leaderboardDisplay.style.opacity = 0;
+// leaderboardDisplay.style.display = "none";
+noTentative = localStorage.getItem("nbTotalTentatives");
+leaderboard = localStorage.getItem("leaderboard");
+
+if(noTentative == null){
+    noTentative = 1;
+}else{
+    noTentative = Number(noTentative) + 1;
+}
+if(leaderboard == null){
+    leaderboard = [];
+}else{
+    leaderboard = JSON.parse(leaderboard);
+}
+
+localStorage.setItem("nbTotalTentatives", noTentative);
+
