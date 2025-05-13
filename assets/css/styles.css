@@ -37,6 +37,7 @@ table{
 
 th{
     background-color: #999;
+    width: 25%;
 }
 
 tbody tr:nth-of-type(even){
@@ -46,6 +47,13 @@ tbody tr:nth-of-type(even){
 tfoot tr td{
     background-color: lightgreen;
     border-top: 2px dashed black;
+}
+
+.titreTri{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
 /* conteneur titre question et choix reponse */
@@ -75,3 +83,33 @@ tfoot tr td{
     cursor: pointer;
 }
 
+/* triage */
+.tri{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    flex-basis: 32px;
+    height: 32px;
+    background-color: rgba(255, 255, 255, .25);
+}
+.tri:hover{
+    background-color: rgba(255, 255, 255, .5);
+    cursor: pointer;
+}
+
+.tri span{
+    position: absolute;
+    left: 0;
+    right: 0;
+    opacity: .25;
+}
+.tri span:last-child{
+    bottom: 0;
+    opacity: .75;
+}
+
+/* reference */
+.test{
+    position: absolute;
+    left: -100px;
+}

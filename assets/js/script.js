@@ -2,7 +2,9 @@
 const
 btnNavQuiz = document.querySelector("button"),
 quizDisplay = document.querySelector(".quiz-display"),
-leaderboardDisplay = document.querySelector(".leaderboard");
+leaderboardDisplay = document.querySelector(".leaderboard"),
+// copie en profondeur (avec enfants) d'un DOMElement
+refBtnTri = document.querySelector(".test").cloneNode(true);
 
 let
 numeroQuestion = 0,
@@ -10,9 +12,10 @@ nbBonnesReponses = 0,
 nbQsTotales = questionnaire.length,
 noTentative,
 temps = 0,
+// id setInterval
 setIID;
 
-console.log(questionnaire, btnNavQuiz, quizDisplay, leaderboardDisplay);
+console.log(questionnaire, btnNavQuiz, quizDisplay, leaderboardDisplay, refBtnTri);
 
 
 /* ECOUTEURS D'EVENEMENTS */
@@ -94,7 +97,7 @@ function endScreen(){
     
     localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
     leaderboard.sort(triLeaderboardReussiteDescendant);
-    console.log(leaderboard);
+    // console.log(leaderboard);
 
     viderConteneur(leaderboardDisplay);
     let head = leaderboardDisplay.createTHead();
@@ -147,11 +150,22 @@ function viderConteneur(conteneur){
  * @param {Array} lstData Tableau contenant toutes les valeurs de donnees a ajouter
  */
 function massCreateTableData(row, thTagInstead, lstData){
+    // https://www.w3schools.com/c/c_conditions_short_hand.php
     let tag = thTagInstead ? "TH" : "TD";
 
     for(let data of lstData){
         let cell = document.createElement(tag);
-        cell.textContent = data;
+
+        if(tag == "TH"){
+            let conteneur = document.createElement("div");
+            conteneur.classList.add("titreTri");
+            conteneur.textContent = data;
+            conteneur.append(refBtnTri.cloneNode(true));
+            cell.append(conteneur);
+        }else{
+            cell.textContent = data;
+        }
+
         row.append(cell);
     }
 }
@@ -165,23 +179,23 @@ function chronometre(){
 displayQuestion();
 leaderboardDisplay.style.display = "none";
 noTentative = localStorage.getItem("nbTotalTentatives");
-// leaderboard = localStorage.getItem("leaderboard");
-console.log(leaderboard, leaderboard[0]);
+// console.log(leaderboard, leaderboard[0]);
+// https://www.w3schools.com/js/js_object_methods.asp
+// puisque leaderboard est const, copie doit etre faite avec methode assign()
 Object.assign(leaderboard, JSON.parse(localStorage.getItem("leaderboard")));
-console.log(leaderboard, leaderboard[0], JSON.parse(localStorage.getItem("leaderboard")));
+// console.log(leaderboard, leaderboard[0], JSON.parse(localStorage.getItem("leaderboard")));
+// modification de la ref
+refBtnTri.classList.replace("test", "tri");
+console.log(refBtnTri);
 
 if(noTentative == null){
     noTentative = 1;
 }else{
     noTentative = Number(noTentative) + 1;
 }
-// if(leaderboard == null){
-//     leaderboard = [];
-// }else{
-//     leaderboard = JSON.parse(leaderboard);
-// }
 
 localStorage.setItem("nbTotalTentatives", noTentative);
+// commencer le timer
 setIID = setInterval(chronometre, 1000);
 
 

@@ -36,8 +36,8 @@ const leaderboard = [];
 /**
  * Constructeur pour donnees leaderboard
  * @param {Number} tentative Numero de la tentative
- * @param {Number} nbBonnesReponses Le nombre de bonnes responses
- * @param {Number} temps Le temps ecoule
+ * @param {Number} nbBonnesReponses Nombre de bonnes responses
+ * @param {Number} temps Temps ecoule, converti en string selon format "min : sec"
  */
 function LeaderboardData(tentative, nbBonnesReponses, temps){
     this.tentative = tentative;
@@ -55,18 +55,19 @@ function LeaderboardData(tentative, nbBonnesReponses, temps){
  * > 0 -> [b, a]
  * < 0 -> [a, b]
  * === 0 -> meme ordre
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
  */
 function triLeaderboardReussiteDescendant(a, b){
     return b.tauxReussite - a.tauxReussite
 }
 
 /**
- * Convertit le temps en secondes en une chaine de caracteres selon le format "mm:ss"
+ * Convertit le temps en secondes en une chaine de caracteres selon le format "min : sec"
  * @param {Number} temps Valeur de temps en secondes
- * @returns Chaine de caracteres au format "mm:ss"
+ * @returns Chaine de caracteres au format "min : sec"
  */
 function timeToString(temps){
     let minutes = Math.floor(temps / 60);
     let secondes = temps % 60;
-    return `${minutes} : ${secondes}`;
+    return `${minutes} : ${secondes}`
 }
