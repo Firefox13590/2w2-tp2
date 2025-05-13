@@ -31,19 +31,19 @@ const questionnaire = [
 /**
  * Structure pour leaderboard
  */
-let leaderboard = [];
+const leaderboard = [];
 
 /**
  * Constructeur pour donnees leaderboard
- * @param {Number} tentative 
- * @param {Number} nbBonnesReponses 
- * @param {Number} temps 
+ * @param {Number} tentative Numero de la tentative
+ * @param {Number} nbBonnesReponses Le nombre de bonnes responses
+ * @param {Number} temps Le temps ecoule
  */
 function LeaderboardData(tentative, nbBonnesReponses, temps){
     this.tentative = tentative;
     this.nbBonnesReponses = nbBonnesReponses;
     this.tauxReussite = Math.round((this.nbBonnesReponses / nbQsTotales) * 100);
-    this.temps = temps;
+    this.temps = timeToString(temps);
 }
 
 /**
@@ -58,4 +58,15 @@ function LeaderboardData(tentative, nbBonnesReponses, temps){
  */
 function triLeaderboardReussiteDescendant(a, b){
     return b.tauxReussite - a.tauxReussite
+}
+
+/**
+ * Convertit le temps en secondes en une chaine de caracteres selon le format "mm:ss"
+ * @param {Number} temps Valeur de temps en secondes
+ * @returns Chaine de caracteres au format "mm:ss"
+ */
+function timeToString(temps){
+    let minutes = Math.floor(temps / 60);
+    let secondes = temps % 60;
+    return `${minutes} : ${secondes}`;
 }

@@ -6,12 +6,15 @@
     box-sizing: border-box;
 }
 
-section.quiz-display{
+main>*{
+    margin: 100px;
+    padding: 20px;
+}
+
+main section{
     border: 5px solid black;
     display: flex;
     flex-direction: column;
-    margin: 100px;
-    padding: 20px;
     justify-content: space-around;
     align-items: center;
     border-radius: 20px;
@@ -30,27 +33,22 @@ th, td{
 
 table{
     width: 90%;
-    margin: auto;
 }
 
 th{
-    background-color: #777;
+    background-color: #999;
 }
 
 tbody tr:nth-of-type(even){
-    background-color: #aaa;
-}
-
-tbody tr:last-of-type td{
-    border-bottom: 1px dashed black;
+    background-color: #ddd;
 }
 
 tfoot tr td{
     background-color: lightgreen;
-    border-top: 1px dashed black;
+    border-top: 2px dashed black;
 }
 
-/* contient titre question et choix reponse */
+/* conteneur titre question et choix reponse */
 .conteneurChoix{
     display: flex;
     flex-wrap: wrap;

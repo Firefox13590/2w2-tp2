@@ -62,7 +62,7 @@ function processNextAction(){
 
 /**
  * Check si la reponse cliquee est la bonne ou non
- * @param {MouseEvent} e evenement click de l'interface MouseEvent
+ * @param {MouseEvent} e Evenement click de l'interface MouseEvent
  */
 function validationReponse(e){
     // console.log(e.target);
@@ -87,6 +87,12 @@ function endScreen(){
 
     currentTentativeData = new LeaderboardData(noTentative, nbBonnesReponses, temps);
     leaderboard.push(currentTentativeData);
+
+    while(leaderboard.length > 10){
+        leaderboard.pop();
+    }
+    
+    localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
     leaderboard.sort(triLeaderboardReussiteDescendant);
     console.log(leaderboard);
 
@@ -96,7 +102,7 @@ function endScreen(){
     let foot = leaderboardDisplay.createTFoot();
     let row = head.insertRow();
     console.log(head, body, foot, row);
-    massCreateTableData(row, true, ["# Tentative", "Nombre bonnes réponses", "% Taux réussite", "Temps"]);
+    massCreateTableData(row, true, ["# Tentative", "Nombre bonnes réponses", "% Taux réussite", "Temps (min : sec)"]);
 
     for(let stats of leaderboard){
         row = body.insertRow();
@@ -113,6 +119,7 @@ function endScreen(){
 function restartQuiz(){
     numeroQuestion = nbBonnesReponses = temps = 0;
     noTentative++;
+    localStorage.setItem("nbTotalTentatives", noTentative);
     quizDisplay.style.display = "flex";
     leaderboardDisplay.style.display = "none";
     btnNavQuiz.removeEventListener("click", restartQuiz);
@@ -158,19 +165,25 @@ function chronometre(){
 displayQuestion();
 leaderboardDisplay.style.display = "none";
 noTentative = localStorage.getItem("nbTotalTentatives");
-leaderboard = localStorage.getItem("leaderboard");
+// leaderboard = localStorage.getItem("leaderboard");
+console.log(leaderboard, leaderboard[0]);
+Object.assign(leaderboard, JSON.parse(localStorage.getItem("leaderboard")));
+console.log(leaderboard, leaderboard[0], JSON.parse(localStorage.getItem("leaderboard")));
 
 if(noTentative == null){
     noTentative = 1;
 }else{
     noTentative = Number(noTentative) + 1;
 }
-if(leaderboard == null){
-    leaderboard = [];
-}else{
-    leaderboard = JSON.parse(leaderboard);
-}
+// if(leaderboard == null){
+//     leaderboard = [];
+// }else{
+//     leaderboard = JSON.parse(leaderboard);
+// }
 
 localStorage.setItem("nbTotalTentatives", noTentative);
 setIID = setInterval(chronometre, 1000);
+
+
+// localStorage.clear();
 
