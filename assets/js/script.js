@@ -1,9 +1,21 @@
+/* REFERENCES */
+/*
+Copie de node: https://developer.mozilla.org/en-US/docs/Web/API/Node/cloneNode
+Boucle forEach: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
+Shorthand if: https://www.w3schools.com/c/c_conditions_short_hand.php
+Node parent: https://developer.mozilla.org/en-US/docs/Web/API/Node/parentNode
+Methodes prototype des arrays: https://www.w3schools.com/js/js_object_methods.asp
+Obtenir le nom d'un constructeur: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof
+Attribut data: https://developer.mozilla.org/en-US/docs/Web/HTML/How_to/Use_data_attributes
+*/
+
+
 /* VARIABLES */
 const
 btnNavQuiz = document.querySelector("button"),
 quizDisplay = document.querySelector(".quiz-display"),
 leaderboardDisplay = document.querySelector(".leaderboard"),
-// copie en profondeur (avec enfants) d'un DOMElement
+// copie en profondeur (avec enfants) d'un element DOM
 refBtnTri = document.querySelector(".test").cloneNode(true);
 
 let
@@ -13,7 +25,17 @@ nbQsTotales = questionnaire.length,
 noTentative,
 temps = 0,
 // id setInterval
-setIID;
+setIID,
+// liste de tous les btn pour le tri
+lstBtnTri,
+newData = true,
+
+// config de tri
+// ordre de tri
+configOrdre = "d",
+// propriete a trier
+configPropriete = "tentative",
+sortConfig = [configOrdre, configPropriete];
 
 console.log(questionnaire, btnNavQuiz, quizDisplay, leaderboardDisplay, refBtnTri);
 
@@ -88,24 +110,36 @@ function endScreen(){
     quizDisplay.style.display = "none";
     leaderboardDisplay.style.display = "table";
 
-    currentTentativeData = new LeaderboardData(noTentative, nbBonnesReponses, temps);
-    leaderboard.push(currentTentativeData);
+    if(newData){
+        currentTentativeData = new LeaderboardData(noTentative, nbBonnesReponses, temps);
+        leaderboard.push(currentTentativeData);
+        newData = false;
+    }
+
+    localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+    // leaderboard.sort(triLeaderboardReussiteDescendant);
+    leaderboard.sort(triLeaderboardReussiteDescendant(sortConfig[0], sortConfig[1]));
+    // console.log(leaderboard);
 
     while(leaderboard.length > 10){
         leaderboard.pop();
     }
-    
-    localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
-    leaderboard.sort(triLeaderboardReussiteDescendant);
-    // console.log(leaderboard);
 
     viderConteneur(leaderboardDisplay);
     let head = leaderboardDisplay.createTHead();
     let body = leaderboardDisplay.createTBody();
     let foot = leaderboardDisplay.createTFoot();
     let row = head.insertRow();
-    console.log(head, body, foot, row);
+    // console.log(head, body, foot, row);
     massCreateTableData(row, true, ["# Tentative", "Nombre bonnes réponses", "% Taux réussite", "Temps (min : sec)"]);
+    lstBtnTri = document.querySelectorAll(".tri");
+    lstBtnTri.forEach(function(element){
+        element.addEventListener("click", function(e){
+            updateSortBtnVisual([sortConfig[0], this.dataset.property], e);
+        });
+    });
+    // console.log(lstBtnTri);
+    updateSortBtnVisual(sortConfig);
 
     for(let stats of leaderboard){
         row = body.insertRow();
@@ -122,6 +156,7 @@ function endScreen(){
 function restartQuiz(){
     numeroQuestion = nbBonnesReponses = temps = 0;
     noTentative++;
+    newData = true;
     localStorage.setItem("nbTotalTentatives", noTentative);
     quizDisplay.style.display = "flex";
     leaderboardDisplay.style.display = "none";
@@ -150,16 +185,18 @@ function viderConteneur(conteneur){
  * @param {Array} lstData Tableau contenant toutes les valeurs de donnees a ajouter
  */
 function massCreateTableData(row, thTagInstead, lstData){
-    // https://www.w3schools.com/c/c_conditions_short_hand.php
+    // je vais pas faire otut un if else pour 1 lettre de difference...
     let tag = thTagInstead ? "TH" : "TD";
 
-    for(let data of lstData){
+    for(let [index, data] of lstData.entries()){
         let cell = document.createElement(tag);
 
         if(tag == "TH"){
+            let properties = Object.keys(leaderboard[0]);
             let conteneur = document.createElement("div");
             conteneur.classList.add("titreTri");
             conteneur.textContent = data;
+            refBtnTri.dataset.property = properties[index];
             conteneur.append(refBtnTri.cloneNode(true));
             cell.append(conteneur);
         }else{
@@ -170,8 +207,52 @@ function massCreateTableData(row, thTagInstead, lstData){
     }
 }
 
+/**
+ * Traque le tmeps ecoule
+ */
 function chronometre(){
     temps++;
+}
+
+/**
+ * 
+ * @param {Array} config 
+ * @param {MouseEvent} e 
+ */
+function updateSortBtnVisual(config, e){
+    let btn = document.querySelector(`.tri[data-property='${config[1]}']`);
+    // console.log(btn);
+    // let index = config[0] == "d" ? 0 : 1;
+    let index = config[0];
+    // console.log(index, !index);
+
+    for(let btn of lstBtnTri){
+        for(let span of btn.children){
+            span.classList.remove("sortOn");
+        }
+    }
+    if(e != undefined){
+        // target donne l'un des span, alors je get le parent
+        let btn = e.target.parentNode;
+        // console.log(btn);
+        btn.querySelector(`span:not([data-sort-order='${index}'])`).classList.add("sortOn");
+        // console.log(btn.children, index);
+    }else{
+        // console.log(btn, typeof(btn), btn.constructor.name);
+        btn.querySelector(`span[data-sort-order='${index}']`).classList.add("sortOn");
+        // console.log(btn.children[index], btn.children[index].classList);
+    }
+
+    configOrdre = btn.querySelector("span.sortOn").dataset.sortOrder;
+    // console.log(btn.querySelector("span.sortOn"), btn.querySelector("span.sortOn").dataset.sortOrder);
+    configPropriete = btn.dataset.property;
+    sortConfig = [configOrdre, configPropriete];
+    // console.log(configOrdre, configPropriete, sortConfig);
+    // leaderboard.sort(triLeaderboardReussiteDescendant(sortConfig[0], sortConfig[1]));
+
+    if(e != undefined){
+        endScreen();
+    }
 }
 
 
@@ -180,8 +261,7 @@ displayQuestion();
 leaderboardDisplay.style.display = "none";
 noTentative = localStorage.getItem("nbTotalTentatives");
 // console.log(leaderboard, leaderboard[0]);
-// https://www.w3schools.com/js/js_object_methods.asp
-// puisque leaderboard est const, copie doit etre faite avec methode assign()
+// puisque leaderboard est const, copie doit etre faite avec methode prototype assign()
 Object.assign(leaderboard, JSON.parse(localStorage.getItem("leaderboard")));
 // console.log(leaderboard, leaderboard[0], JSON.parse(localStorage.getItem("leaderboard")));
 // modification de la ref
@@ -200,4 +280,3 @@ setIID = setInterval(chronometre, 1000);
 
 
 // localStorage.clear();
-
