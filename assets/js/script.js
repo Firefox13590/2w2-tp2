@@ -12,7 +12,8 @@ Attribut data: https://developer.mozilla.org/en-US/docs/Web/HTML/How_to/Use_data
 
 /* VARIABLES */
 const
-btnNavQuiz = document.querySelector("button"),
+btnNavQuiz = document.querySelector("button.navQuiz"),
+btnClearStorage = document.querySelector("button.clearStorage"),
 quizDisplay = document.querySelector(".quiz-display"),
 leaderboardDisplay = document.querySelector(".leaderboard"),
 // copie en profondeur (avec enfants) d'un element DOM
@@ -37,11 +38,14 @@ configOrdre = "d",
 configPropriete = "tentative",
 sortConfig = [configOrdre, configPropriete];
 
-console.log(questionnaire, btnNavQuiz, quizDisplay, leaderboardDisplay, refBtnTri);
+console.log(questionnaire, btnNavQuiz, btnClearStorage, quizDisplay, leaderboardDisplay, refBtnTri);
 
 
 /* ECOUTEURS D'EVENEMENTS */
 btnNavQuiz.addEventListener("click", processNextAction);
+btnClearStorage.addEventListener("click", function(){
+    localStorage.clear();
+});
 
 
 /* FONCTIONS */
@@ -247,6 +251,7 @@ function updateSortBtnVisual(config, e){
     // console.log(btn.querySelector("span.sortOn"), btn.querySelector("span.sortOn").dataset.sortOrder);
     configPropriete = btn.dataset.property;
     sortConfig = [configOrdre, configPropriete];
+    localStorage.setItem("sortConfig", JSON.stringify(sortConfig));
     // console.log(configOrdre, configPropriete, sortConfig);
     // leaderboard.sort(triLeaderboardReussiteDescendant(sortConfig[0], sortConfig[1]));
 
@@ -267,14 +272,21 @@ Object.assign(leaderboard, JSON.parse(localStorage.getItem("leaderboard")));
 // modification de la ref
 refBtnTri.classList.replace("test", "tri");
 console.log(refBtnTri);
+sortConfig = JSON.parse(localStorage.getItem("sortConfig"));
 
 if(noTentative == null){
     noTentative = 1;
 }else{
     noTentative = Number(noTentative) + 1;
 }
+if(sortConfig == null){
+    sortConfig = [configOrdre, configPropriete] = ["d", "tentative"];
+}else{
+    [configOrdre, configPropriete] = sortConfig;
+}
 
 localStorage.setItem("nbTotalTentatives", noTentative);
+// localStorage.setItem("sortConfig", JSON.stringify(sortConfig));
 // commencer le timer
 setIID = setInterval(chronometre, 1000);
 

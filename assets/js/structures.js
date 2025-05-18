@@ -1,8 +1,22 @@
 /**
  * Structure pour questionnaire
  */
+    // {
+    //     // Nom jeu/franchise
+    //     titre: "",
+    //     choix: [
+    //         "",
+    //         "",
+    //         "",
+    //         "",
+    //         "",
+    //         "",
+    //     ],
+    //     reponse: 0,
+    // },
 const questionnaire = [
     {
+        // Mario
         titre: "Pourquoi suis-je fan de la franchise Mario?",
         choix: [
             "J'adore financer les désirs capitalistes de Nintendo",
@@ -15,6 +29,7 @@ const questionnaire = [
         reponse: 2,
     },
     {
+        // Persona 4
         titre: "Qui est la best girl de Persona 4?",
         choix: [
             "Chie",
@@ -26,6 +41,59 @@ const questionnaire = [
         ],
         reponse: 5,
     },
+    {
+        // Clash of Clans
+        titre: "Qu'est-ce COC?",
+        choix: [
+            "Un sérieux Conflit racial",
+            "Un Coq",
+            "Clash of Clans",
+            "C'est le \"Center of Computers\"",
+            "Un Palindrome",
+            "COC"
+        ],
+        reponse: 0,
+    },
+    {
+        // Minecraft
+        titre: "Qui est Steve?",
+        choix: [
+            "L'enfant de Notch et Mojang",
+            "Un homme blanc barbu, corpulent et massif dans la cinquantaine ",
+            "Le gars carré",
+            "Le petit ami d'Alex",
+            "Monsieur Jobs",
+            "Le commentateur de Family feud",
+        ],
+        reponse: 1,
+    },
+    {
+        // Terraria
+        titre: "Quelle est \"OBJECTIVEMENT\" la meilleure classe dans terraria?",
+        choix: [
+            "La classe Ranger. C'est l'équivalent de vivre aux USA et avoir au moins 42 armes a feu",
+            "Meme si j'adore la classe Summoner, mon avocat m'a recommandé de ne pas en dire davantage",
+            "Il faut être un joueur Melee! Satisfaction garantie quand tu facetank une attaque de destruction massive",
+            "Thrower. Comme ça, t'existes pas. Tu peux pas perdre si tu n'existes même pas",
+            "La classe Mage parce que c'est hilarant d'utiliser le pouvoir des drogues illicites pour tuer dieu",
+            "Imagine se limiter aux classes vanilla...",
+        ],
+        reponse: 4,
+    },
+    {
+        // Arknights
+        titre: "Qui est la waifu #1?",
+        choix: [
+            "W",
+            "Angelina",
+            "Lappland",
+            "Toutes ces réponses",
+            "Manticore",
+            "Texas",
+        ],
+        reponse: 3,
+    },
+
 ];
 
 /**
