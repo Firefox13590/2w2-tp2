@@ -1,0 +1,40 @@
+
+
+/* animations boutons choix */
+
+@keyframes suspense {
+    0%, 17%, 50%, 83%{
+        background-color: rgb(88, 195, 231);
+    }
+    33%, 67%, 100%{
+        background-color: gray;
+    }
+}
+@keyframes bonneRep {
+    from{
+        background-color: grey;
+    }
+    to{
+        background-color: lightgreen;
+    }
+}
+@keyframes mauvaiseRep {
+    from{
+        background-color: grey;
+    }
+    to{
+        background-color: rgb(238, 144, 144);
+    }
+}
+
+
+.choix{
+    transition: background-color .5s;
+    /* transition-property: background-color, transform;
+    transition-duration: .5s; */
+}
+.choix:hover{
+    background-color: rgb(88, 195, 231);
+    cursor: pointer;
+}
+

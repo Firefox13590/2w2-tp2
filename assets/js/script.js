@@ -6,14 +6,13 @@ Shorthand if: https://www.w3schools.com/c/c_conditions_short_hand.php
 Node parent: https://developer.mozilla.org/en-US/docs/Web/API/Node/parentNode
 Methodes prototype des arrays: https://www.w3schools.com/js/js_object_methods.asp
 Obtenir le nom d'un constructeur: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof
-Attribut data: https://developer.mozilla.org/en-US/docs/Web/HTML/How_to/Use_data_attributes
 */
 
 
 /* VARIABLES */
 const
-btnNavQuiz = document.querySelector("button.navQuiz"),
-btnClearStorage = document.querySelector("button.clearStorage"),
+btnNavQuiz = document.querySelector(".navQuiz"),
+btnClearStorage = document.querySelector(".clearStorage"),
 quizDisplay = document.querySelector(".quiz-display"),
 leaderboardDisplay = document.querySelector(".leaderboard"),
 // copie en profondeur (avec enfants) d'un element DOM
