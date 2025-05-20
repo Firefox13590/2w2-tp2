@@ -32,6 +32,7 @@
     transition: background-color .5s;
     /* transition-property: background-color, transform;
     transition-duration: .5s; */
+    /* animation: name duration timing-function delay iteration-count direction fill-mode; */
 }
 .choix:hover{
     background-color: rgb(88, 195, 231);

@@ -1,5 +1,6 @@
 
 
+/* styles de base pour affichage telephone */
 /* GENERAL */
 
 *, ::before, ::after{
@@ -142,6 +143,7 @@ footer{
 
 /* MEDIA QUERIES */
 
+/* styles pour affichage tablette */
 @media screen and (min-width: 768px) {
     .conteneurChoix{
         display: flex;
@@ -155,6 +157,7 @@ footer{
     }
 }
 
+/* styles pour affiche ordi */
 @media screen and (min-width: 992px) {
     main > *{
         margin: 100px 5rem;

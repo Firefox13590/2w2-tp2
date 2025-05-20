@@ -6,6 +6,7 @@ Shorthand if: https://www.w3schools.com/c/c_conditions_short_hand.php
 Node parent: https://developer.mozilla.org/en-US/docs/Web/API/Node/parentNode
 Methodes prototype des arrays: https://www.w3schools.com/js/js_object_methods.asp
 Obtenir le nom d'un constructeur: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof
+Assigner meme valeur a plusieurs variables: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Assignment
 */
 
 
@@ -28,9 +29,13 @@ temps = 0,
 setIID,
 // liste de tous les btn pour le tri
 lstBtnTri,
+// si nouvelle donnee suite a nouvelle tentative
+// ou rearrengement de la table
 newData = true,
+// si user peut cliquer sur option choix au non (pour eviter de tout spam)
+allowInput = true,
 
-// config de tri
+// varaibles pour config de tri
 // ordre de tri
 configOrdre = "d",
 // propriete a trier
@@ -94,15 +99,26 @@ function processNextAction(){
  */
 function validationReponse(e){
     // console.log(e.target);
+    e.target.style.animation = "suspense 2s linear";
 
+    // donne 2eme anim dependant validite reponse
     if(Number(e.target.dataset.index) == questionnaire[numeroQuestion].reponse){
-        console.log("bonne reponse");
+        // console.log("bonne reponse");
+        e.target.style.animation += ", bonneRep 1s cubic-bezier(1,0,1,0) 2s forwards";
         nbBonnesReponses++;
     }else{
-        console.log("mauvaise reponse");
+        // console.log("mauvaise reponse");
+        e.target.style.animation += ", mauvaiseRep 1s cubic-bezier(1,0,1,0) 2s forwards";
     }
 
-    processNextAction();
+    // passe a prochaine etape quand 2eme animation termine
+    e.target.addEventListener("animationend", function(e){
+        // console.log(e);
+        if(e.animationName.slice(-3) == "Rep"){
+            setTimeout(processNextAction, 500);
+        }
+    });
+    // processNextAction();
 }
 
 /**
@@ -157,9 +173,10 @@ function endScreen(){
  * Recommence le quiz
  */
 function restartQuiz(){
+    // reinitialisation variables
     numeroQuestion = nbBonnesReponses = temps = 0;
     noTentative++;
-    newData = true;
+    newData = allowInput = true;
     localStorage.setItem("nbTotalTentatives", noTentative);
     quizDisplay.style.display = "flex";
     leaderboardDisplay.style.display = "none";
@@ -172,7 +189,7 @@ function restartQuiz(){
 
 /**
  * Fonction recursive pour vider tout le contenu(enfants) d'un element HTML
- * @param {Element} conteneur Conteneur HTML de type Element
+ * @param {Element} conteneur Conteneur HTML
  */
 function viderConteneur(conteneur){
     if(conteneur.children.length > 0){
@@ -188,14 +205,16 @@ function viderConteneur(conteneur){
  * @param {Array} lstData Tableau contenant toutes les valeurs de donnees a ajouter
  */
 function massCreateTableData(row, thTagInstead, lstData){
-    // je vais pas faire otut un if else pour 1 lettre de difference...
+    // je vais pas faire tout un if else pour 1 lettre de difference...
     let tag = thTagInstead ? "TH" : "TD";
 
     for(let [index, data] of lstData.entries()){
         let cell = document.createElement(tag);
 
         if(tag == "TH"){
+            // ajoute au table head le conteneur qui a toute l'info
             let properties = Object.keys(leaderboard[0]);
+            // contient texte avec nom donnee + copie du btn de tri
             let conteneur = document.createElement("div");
             conteneur.classList.add("titreTri");
             conteneur.textContent = data;
@@ -203,6 +222,7 @@ function massCreateTableData(row, thTagInstead, lstData){
             conteneur.append(refBtnTri.cloneNode(true));
             cell.append(conteneur);
         }else{
+            // ajoute texte pour les table data
             cell.textContent = data;
         }
 
@@ -218,9 +238,9 @@ function chronometre(){
 }
 
 /**
- * 
- * @param {Array} config 
- * @param {MouseEvent} e 
+ * Met a jour l'opacite des icones google selon la configuration de tri
+ * @param {Array} config Les parametres de configuration
+ * @param {MouseEvent} e Evenement click de l'interface MouseEvent
  */
 function updateSortBtnVisual(config, e){
     let btn = document.querySelector(`.tri[data-property='${config[1]}']`);
@@ -229,23 +249,28 @@ function updateSortBtnVisual(config, e){
     let index = config[0];
     // console.log(index, !index);
 
+    // parcours tous les btns pour enlever la classe qui affiche le tri actif
     for(let btn of lstBtnTri){
         for(let span of btn.children){
             span.classList.remove("sortOn");
         }
     }
+    // si le tri est enclenche par un btn
     if(e != undefined){
         // target donne l'un des span, alors je get le parent
         let btn = e.target.parentNode;
         // console.log(btn);
         btn.querySelector(`span:not([data-sort-order='${index}'])`).classList.add("sortOn");
         // console.log(btn.children, index);
-    }else{
+    }
+    // initialisation config tri au chargement de la page
+    else{
         // console.log(btn, typeof(btn), btn.constructor.name);
         btn.querySelector(`span[data-sort-order='${index}']`).classList.add("sortOn");
         // console.log(btn.children[index], btn.children[index].classList);
     }
 
+    // mise a jour du sortConfig
     configOrdre = btn.querySelector("span.sortOn").dataset.sortOrder;
     // console.log(btn.querySelector("span.sortOn"), btn.querySelector("span.sortOn").dataset.sortOrder);
     configPropriete = btn.dataset.property;
@@ -255,6 +280,7 @@ function updateSortBtnVisual(config, e){
     // leaderboard.sort(triLeaderboardReussiteDescendant(sortConfig[0], sortConfig[1]));
 
     if(e != undefined){
+        // reafficher page de fin apres tri enclenche par un btn
         endScreen();
     }
 }
