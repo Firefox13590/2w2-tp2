@@ -1,4 +1,22 @@
 
+/* polices de caracteres */
+@font-face {
+    font-family: "gameOn";
+    src: url("../fonts/Game\ On_PersonalUseOnly.ttf") format("truetype");
+}
+@font-face {
+    font-family: "fishFingers";
+    src: url("../fonts/FishFingers\ Outline.ttf") format("truetype");
+}
+
+h1{
+    font-family: "fishFingers";
+}
+
+h2{
+    font-family: "gameOn";
+}
+
 
 /* animations boutons choix */
 

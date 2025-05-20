@@ -46,7 +46,7 @@ console.log(questionnaire, btnNavQuiz, btnClearStorage, quizDisplay, leaderboard
 
 
 /* ECOUTEURS D'EVENEMENTS */
-btnNavQuiz.addEventListener("click", processNextAction);
+btnNavQuiz.addEventListener("click", startQuiz);
 btnClearStorage.addEventListener("click", function(){
     localStorage.clear();
 });
@@ -285,10 +285,22 @@ function updateSortBtnVisual(config, e){
     }
 }
 
+/**
+ * Commence le quiz
+ */
+function startQuiz(){
+    quizDisplay.style.display = "flex";
+    btnNavQuiz.removeEventListener("click", startQuiz);
+    btnNavQuiz.textContent = "Prochaine question";
+    btnNavQuiz.addEventListener("click", processNextAction);
+    // commencer le timer
+    setIID = setInterval(chronometre, 1000);
+    displayQuestion();
+}
+
 
 /* EXECUTION */
-displayQuestion();
-leaderboardDisplay.style.display = "none";
+leaderboardDisplay.style.display = quizDisplay.style.display = "none";
 noTentative = localStorage.getItem("nbTotalTentatives");
 // console.log(leaderboard, leaderboard[0]);
 // puisque leaderboard est const, copie doit etre faite avec methode prototype assign()
@@ -312,8 +324,6 @@ if(sortConfig == null){
 
 localStorage.setItem("nbTotalTentatives", noTentative);
 // localStorage.setItem("sortConfig", JSON.stringify(sortConfig));
-// commencer le timer
-setIID = setInterval(chronometre, 1000);
 
 
 // localStorage.clear();
