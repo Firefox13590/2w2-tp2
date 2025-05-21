@@ -1,5 +1,5 @@
 
-/* polices de caracteres */
+/* polices et tailles de caracteres */
 @font-face {
     font-family: "gameOn";
     src: url("../fonts/Game\ On_PersonalUseOnly.ttf") format("truetype");
@@ -9,17 +9,136 @@
     src: url("../fonts/FishFingers\ Outline.ttf") format("truetype");
 }
 
-h1{
+header h1{
     font-family: "fishFingers";
+    font-size: clamp(2rem, 4vw, 4rem);
 }
 
-h2{
+header h2{
     font-family: "gameOn";
+    font-size: clamp(1.5rem, 4vw, 3rem);
+}
+
+
+/* animation du titre */
+/* haut -> bas */
+@keyframes glisse1 {
+    from{
+        translate: 0 -1000px;
+    }
+
+    to{
+        translate: 0;
+    }
+}
+/* gauche -> droite */
+@keyframes glisse2 {
+    from{
+        translate: -2000%;
+    }
+
+    to{
+        translate: 0;
+    }
+}
+/* droite -> gauche */
+@keyframes glisse3 {
+    from{
+        translate: 2000%;
+    }
+
+    to{
+        translate: 0;
+    }
+}
+/* rotation img logo firefox */
+@keyframes tourner {
+    from{
+        transform: rotate(0);
+    }
+
+    to{
+        transform: rotate(1turn);
+    }
+}
+/* animation entree texte edition */
+@keyframes scale-up {
+    from{
+        transform: scale(0);
+    }
+
+    to{
+        transform: scale(1);
+    }
+}
+/* animations texte edition idle */
+@keyframes gradient {
+    0%, 100%{
+        color: hsl(0, 100%, 50%);
+    }
+    10%{
+        color: hsl(36, 100%, 50%);
+    }
+    20%{
+        color: hsl(72, 100%, 50%);
+    }
+    30%{
+        color: hsl(108, 100%, 50%);
+    }
+    40%{
+        color: hsl(144, 100%, 50%);
+    }
+    50%{
+        color: hsl(180, 100%, 50%);
+    }
+    60%{
+        color: hsl(216, 100%, 50%);
+    }
+    70%{
+        color: hsl(252, 100%, 50%);
+    }
+    80%{
+        color: hsl(288, 100%, 50%);
+    }
+    90%{
+        color: hsl(324, 100%, 50%);
+    }
+}
+@keyframes wiggle {
+    0%, 50%, 100%{
+        transform: rotate(0);
+        animation-timing-function: ease-out;
+    }
+    25%{
+        transform: rotate(-15deg);
+        animation-timing-function: ease-in;
+    }
+    75%{
+        transform: rotate(15deg);
+        animation-timing-function: ease-in;
+    }
+}
+
+header h1{
+    position: relative;
+}
+
+h1 .anim-titre{
+    display: inline-block;
+    /* animation: glisse1 2s 1 forwards; */
+    /* animation: name duration timing-function delay iteration-count direction fill-mode; */
+}
+
+/* img.anim-titre{
+    animation: tourner 3s linear infinite;
+} */
+
+header h2{
+    animation: scale-up 2s, wiggle 5s 2s infinite, gradient 5s 2s infinite;
 }
 
 
 /* animations boutons choix */
-
 @keyframes suspense {
     0%, 17%, 50%, 83%{
         background-color: rgb(88, 195, 231);
@@ -32,6 +151,7 @@ h2{
     from{
         background-color: grey;
     }
+
     to{
         background-color: lightgreen;
     }
@@ -40,20 +160,9 @@ h2{
     from{
         background-color: grey;
     }
+
     to{
         background-color: rgb(238, 144, 144);
     }
-}
-
-
-.choix{
-    transition: background-color .5s;
-    /* transition-property: background-color, transform;
-    transition-duration: .5s; */
-    /* animation: name duration timing-function delay iteration-count direction fill-mode; */
-}
-.choix:hover{
-    background-color: rgb(88, 195, 231);
-    cursor: pointer;
 }
 

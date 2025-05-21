@@ -17,7 +17,8 @@ btnClearStorage = document.querySelector(".clearStorage"),
 quizDisplay = document.querySelector(".quiz-display"),
 leaderboardDisplay = document.querySelector(".leaderboard"),
 // copie en profondeur (avec enfants) d'un element DOM
-refBtnTri = document.querySelector(".test").cloneNode(true);
+refBtnTri = document.querySelector(".ref").cloneNode(true),
+titreAnime = document.querySelectorAll(".anim-titre");
 
 let
 numeroQuestion = 0,
@@ -42,7 +43,7 @@ configOrdre = "d",
 configPropriete = "tentative",
 sortConfig = [configOrdre, configPropriete];
 
-console.log(questionnaire, btnNavQuiz, btnClearStorage, quizDisplay, leaderboardDisplay, refBtnTri);
+console.log(questionnaire, btnNavQuiz, btnClearStorage, quizDisplay, leaderboardDisplay, refBtnTri, titreAnime);
 
 
 /* ECOUTEURS D'EVENEMENTS */
@@ -307,7 +308,7 @@ noTentative = localStorage.getItem("nbTotalTentatives");
 Object.assign(leaderboard, JSON.parse(localStorage.getItem("leaderboard")));
 // console.log(leaderboard, leaderboard[0], JSON.parse(localStorage.getItem("leaderboard")));
 // modification de la ref
-refBtnTri.classList.replace("test", "tri");
+refBtnTri.classList.replace("ref", "tri");
 console.log(refBtnTri);
 sortConfig = JSON.parse(localStorage.getItem("sortConfig"));
 
@@ -320,6 +321,14 @@ if(sortConfig == null){
     sortConfig = [configOrdre, configPropriete] = ["d", "tentative"];
 }else{
     [configOrdre, configPropriete] = sortConfig;
+}
+for(let [index, partie] of titreAnime.entries()){
+    let rng = Math.round(Math.random() * 2) + 1;
+    if(index == 2){
+        partie.style.animation += `glisse${rng} 2s 1, tourner 3s linear infinite`;
+    }else{
+        partie.style.animation = `glisse${rng} 2s 1`;
+    }
 }
 
 localStorage.setItem("nbTotalTentatives", noTentative);

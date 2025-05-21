@@ -82,7 +82,7 @@ const questionnaire = [
     },
     {
         // Arknights
-        titre: "Qui est la waifu #1?",
+        titre: "Qui est ma waifu #1 dans Arknights?",
         choix: [
             "W",
             "Angelina",

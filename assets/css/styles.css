@@ -20,6 +20,12 @@ header > *{
     text-align: center;
 }
 
+/* afficahge img logo firefox */
+header h1 img{
+    width: 32px;
+    vertical-align: text-top;
+}
+
 /* MAIN */
 
 main > *{
@@ -37,7 +43,7 @@ main section{
     gap: 50px;
 }
 
-/* table */
+/* styles pour table */
 table, th, td{
     border: 1px solid black;
     border-collapse: collapse;
@@ -73,7 +79,7 @@ tfoot tr td{
     width: 100%;
 }
 
-/* conteneur titre question et choix reponse */
+/* styles pour conteneur du titre et des choix de reponse */
 .conteneurChoix{
     display: flex;
     flex-flow: column nowrap;
@@ -95,9 +101,14 @@ tfoot tr td{
     color: black;
     text-align: center;
     width: 100%;
+    transition: background-color .5s;
+}
+.choix:hover{
+    background-color: rgb(88, 195, 231);
+    cursor: pointer;
 }
 
-/* triage */
+/* styles btn de triage */
 .tri{
     display: flex;
     flex-direction: column;
@@ -105,6 +116,7 @@ tfoot tr td{
     flex-basis: 32px;
     height: 32px;
     background-color: rgba(255, 255, 255, .25);
+    transition: background-color 1s;
 }
 .tri:hover{
     background-color: rgba(255, 255, 255, .5);
@@ -134,8 +146,8 @@ footer{
     gap: 10%;
 }
 
-/* reference */
-.test{
+/* masquer reference de l'affichage */
+.ref{
     position: absolute;
     left: -100px;
 }
@@ -159,6 +171,11 @@ footer{
 
 /* styles pour affiche ordi */
 @media screen and (min-width: 992px) {
+    header h1 img{
+        width: 64px;
+        vertical-align: sub;
+    }
+
     main > *{
         margin: 100px 5rem;
     }
