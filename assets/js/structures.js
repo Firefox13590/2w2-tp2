@@ -93,7 +93,45 @@ const questionnaire = [
         ],
         reponse: 3,
     },
-
+    {
+        // Honkai: Star Rail
+        titre: "Wildfire",
+        choix: [
+            "Of snow and ember",
+            "HOYO-MIX",
+            "Cocolia",
+            "WE'VE MADE A CHOICE, GO FIGHT AGAISNT YOUR FATE!",
+            "Wildfire",
+            "Jarilo-VI",
+        ],
+        reponse: 3,
+    },
+    {
+        // BTD6
+        titre: "Comment gagner à BTD6?",
+        choix: [
+            "Avec des singes",
+            "Avec Sauda et ISAB " + String.fromCodePoint(0x1F60F),
+            "Avec des ballons",
+            "En tuant les singes",
+            "En tuant les ballons",
+            "En battant le jau, voyons",
+        ],
+        reponse: 1,
+    },
+    {
+        // Pokemon
+        titre: "Quel est le meilleur Pokémon?",
+        choix: [
+            "Arceus: c'est le dieu des Pokémon",
+            "Gardevoir :3",
+            "Aquali... je ne vais pas élaborer",
+            "Léviator le beau gosse",
+            "LOCKPIN LOCKPIN LOCKPIN RAAAAAAARGH",
+            "Dracofeu parce que c'est un dragon de feu",
+        ],
+        reponse: 5,
+    },
 ];
 
 /**

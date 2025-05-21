@@ -1,5 +1,5 @@
 
-/* polices et tailles de caracteres */
+/* styles texte */
 @font-face {
     font-family: "gameOn";
     src: url("../fonts/Game\ On_PersonalUseOnly.ttf") format("truetype");
@@ -14,9 +14,17 @@ header h1{
     font-size: clamp(2rem, 4vw, 4rem);
 }
 
-header h2{
+header h2, footer *{
     font-family: "gameOn";
     font-size: clamp(1.5rem, 4vw, 3rem);
+}
+
+.quiz-display h2::first-letter{
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    font-style: italic;
+    text-decoration: underline;
 }
 
 
@@ -166,3 +174,42 @@ header h2{
     }
 }
 
+
+/* transitions boutons dans footer */
+footer *{
+    background-color: rgb(202, 202, 202);
+    border: 5px solid black;
+    padding: 10px;
+    border-radius: 50px;
+    cursor: pointer;
+    position: relative;
+    transition: background-color .5s;
+}
+
+.navQuiz:hover{
+    background-color: rgb(178, 233, 50);
+}
+.navQuiz::before{
+    position: absolute;
+    content: "\2BC8";
+    left: -12%;
+    transition-property: left;
+    transition-duration: .5s;
+}
+.navQuiz:hover::before{
+    left: 100%;
+}
+
+.clearStorage:hover{
+    background-color: rgb(252, 102, 252);
+}
+.clearStorage::after{
+    position: absolute;
+    content: "\1F5D1";
+    right: -10%;
+    transition-property: right;
+    transition-duration: .5s;
+}
+.clearStorage:hover::after{
+    right: 101%;
+}
