@@ -83,6 +83,8 @@ function displayQuestion(){
  * incremente le nb de questions et decide soit d'afficher la prochaine qs soit la fin du quiz
  */
 function processNextAction(){
+    allowInput = true;
+
     if(numeroQuestion + 1 < nbQsTotales){
         numeroQuestion++;
         displayQuestion();
@@ -99,27 +101,30 @@ function processNextAction(){
  * @param {MouseEvent} e Evenement click de l'interface MouseEvent
  */
 function validationReponse(e){
-    // console.log(e.target);
-    e.target.style.animation = "suspense 2s linear";
+    if(allowInput){
+        // console.log(e.target);
+        e.target.style.animation = "suspense 2s linear";
 
-    // donne 2eme anim dependant validite reponse
-    if(Number(e.target.dataset.index) == questionnaire[numeroQuestion].reponse){
-        // console.log("bonne reponse");
-        e.target.style.animation += ", bonneRep 1s cubic-bezier(1,0,1,0) 2s forwards";
-        nbBonnesReponses++;
-    }else{
-        // console.log("mauvaise reponse");
-        e.target.style.animation += ", mauvaiseRep 1s cubic-bezier(1,0,1,0) 2s forwards";
-    }
-
-    // passe a prochaine etape quand 2eme animation termine
-    e.target.addEventListener("animationend", function(e){
-        // console.log(e);
-        if(e.animationName.slice(-3) == "Rep"){
-            setTimeout(processNextAction, 500);
+        // donne 2eme anim dependant validite reponse
+        if(Number(e.target.dataset.index) == questionnaire[numeroQuestion].reponse){
+            // console.log("bonne reponse");
+            e.target.style.animation += ", bonneRep 1s cubic-bezier(1,0,1,0) 2s forwards";
+            nbBonnesReponses++;
+        }else{
+            // console.log("mauvaise reponse");
+            e.target.style.animation += ", mauvaiseRep 1s cubic-bezier(1,0,1,0) 2s forwards";
         }
-    });
-    // processNextAction();
+
+        // passe a prochaine etape quand 2eme animation termine
+        e.target.addEventListener("animationend", function(e){
+            // console.log(e);
+            if(e.animationName.slice(-3) == "Rep"){
+                setTimeout(processNextAction, 500);
+            }
+        });
+        // processNextAction();
+        allowInput = false;
+    }
 }
 
 /**
